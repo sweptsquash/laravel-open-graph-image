@@ -35,6 +35,7 @@
     "orchestra/testbench": "^8.0 || ^9.0 || ^10.0",
     "pestphp/pest": "^2.34 || ^3.7.4",
     "pestphp/pest-plugin-laravel": "^2.2 || ^3.1.0",
+    "pestphp/pest-plugin-type-coverage": "^3.4.0",
     "phpstan/extension-installer": "^1.1",
     "phpstan/phpstan": "^2.1.6",
     "phpstan/phpstan-deprecation-rules": "^2.0.1",
@@ -78,6 +79,7 @@
     "analyse": "vendor/bin/phpstan analyse",
     "format": "vendor/bin/pint",
     "test": "vendor/bin/pest",
-    "test-coverage": "vendor/bin/pest --coverage"
+    "test-coverage": "vendor/bin/pest --coverage",
+    "test-type-coverage": "vendor/bin/pest --type-coverage --min=99 --memory-limit=512M"
   }
 }
