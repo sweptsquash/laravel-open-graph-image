@@ -4,13 +4,14 @@ namespace Backstage\OgImage\Laravel\View\Components;
 
 use Backstage\OgImage\Laravel\Facades\OgImage;
 use Closure;
+use Illuminate\Support\Facades\View;
 use Illuminate\View\Component;
 
 class OgImageComponent extends Component
 {
     public function render(): Closure
     {
-        $metatags = view('og-image::metatags');
+        $metatags = View::make('og-image::metatags');
 
         return function (array $data) use ($metatags) {
             $this->updateAndCacheSlotView($data);

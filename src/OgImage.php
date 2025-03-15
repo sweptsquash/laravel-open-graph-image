@@ -68,13 +68,13 @@ class OgImage
         return $this->getStoragePath('images').'/'.$this->getStorageImageFileName($signature);
     }
 
-    public function getStorageImageFileExists(string $signature): string
+    public function getStorageImageFileExists(string $signature): bool
     {
         return $this->getStorageDisk()
             ->exists($this->getStorageImageFilePath($signature));
     }
 
-    public function getStorageImageFileData(string $signature): string
+    public function getStorageImageFileData(string $signature): string|null
     {
         return $this->getStorageDisk()
             ->get($this->getStorageImageFilePath($signature));
@@ -241,7 +241,7 @@ class OgImage
         ]);
     }
 
-    public function generateImage(Request $request)
+    public function generateImage(Request $request): string|null
     {
         if ($request->view && view()->exists($request->view)) {
             $html = View::make($request->view, $request->all())
@@ -258,5 +258,7 @@ class OgImage
         }
 
         OgImage::saveImage($html, $request->signature);
+
+        return null;
     }
 }
