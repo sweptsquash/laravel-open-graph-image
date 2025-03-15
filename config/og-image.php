@@ -1,17 +1,20 @@
 <?php
 
 return [
-    'image' => [
-        'extension' => 'jpg',
-        'quality' => 100,
-        'width' => 1200,
-        'height' => 630,
+    'format' => 'jpg', // jpg, png, webp
+    'quality' => 100,
+    'width' => 1200,
+    'height' => 630,
+
+    'chrome' => [
+        'binary' => '/usr/bin/google-chrome-stable',
+        'flags' => [],
     ],
 
     // The cache location to use.
     'storage' => [
         'disk' => 'public',
-        'path' => 'social/open-graph',
+        'path' => 'og-images',
     ],
 
     // Whether to use the browse URL instead of the HTML input.
@@ -24,12 +27,5 @@ return [
         'og:description' => 'description',
         'og:type' => 'type',
         'og:url' => 'url',
-    ],
-
-    // set custom paths for node and npm binaries for puppeteer
-    // leave empty to resolve using default paths
-    'paths' => [
-        'node' => env('NODE_PATH'),
-        'npm' => env('NPM_PATH'),
     ],
 ];

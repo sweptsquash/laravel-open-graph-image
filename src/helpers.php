@@ -1,10 +1,10 @@
 <?php
 
-use Vormkracht10\LaravelOpenGraphImage\Facades\OpenGraphImage;
+use Backstage\OgImage\Laravel\Facades\OgImage;
 
 if (! function_exists('og')) {
     function og(...$args): string
     {
-        return OpenGraphImage::url(...$args);
+        return OgImage::url(...$args);
     }
 }

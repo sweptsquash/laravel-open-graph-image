@@ -1,18 +1,20 @@
 <?php
 
-namespace Vormkracht10\LaravelOpenGraphImage;
+namespace Backstage\OgImage\Laravel;
 
+use Backstage\OgImage\Laravel\Commands\ClearCache;
+use Backstage\OgImage\Laravel\View\Components\OgImageComponent;
+use Illuminate\Support\Facades\Blade;
 use Spatie\LaravelPackageTools\Commands\InstallCommand;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
-use Vormkracht10\LaravelOpenGraphImage\Commands\ClearCache;
 
-class LaravelOpenGraphImageServiceProvider extends PackageServiceProvider
+class OgImageServiceProvider extends PackageServiceProvider
 {
     public function configurePackage(Package $package): void
     {
         $package
-            ->name('open-graph-image')
+            ->name('og-image')
             ->hasRoute('web')
             ->hasConfigFile()
             ->hasViews()
@@ -20,7 +22,12 @@ class LaravelOpenGraphImageServiceProvider extends PackageServiceProvider
             ->hasInstallCommand(function (InstallCommand $command) {
                 $command
                     ->publishConfigFile()
-                    ->askToStarRepoOnGitHub('vormkracht10/laravel-open-graph-image');
+                    ->askToStarRepoOnGitHub('backstagephp/laravel-og-image');
             });
+    }
+
+    public function packageRegistered()
+    {
+        Blade::component('og-image', OgImageComponent::class);
     }
 }
