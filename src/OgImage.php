@@ -74,7 +74,7 @@ class OgImage
             ->exists($this->getStorageImageFilePath($signature));
     }
 
-    public function getStorageImageFileData(string $signature): string|null
+    public function getStorageImageFileData(string $signature): ?string
     {
         return $this->getStorageDisk()
             ->get($this->getStorageImageFilePath($signature));
@@ -241,7 +241,7 @@ class OgImage
         ]);
     }
 
-    public function generateImage(Request $request): string|null
+    public function generateImage(Request $request): ?string
     {
         if ($request->view && view()->exists($request->view)) {
             $html = View::make($request->view, $request->all())
