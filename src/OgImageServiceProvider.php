@@ -26,7 +26,7 @@ class OgImageServiceProvider extends PackageServiceProvider
             });
     }
 
-    public function packageRegistered()
+    public function packageRegistered(): void
     {
         Blade::component('og-image', OgImageComponent::class);
     }
