@@ -19,7 +19,7 @@ class OgImageComponent extends Component
         };
     }
 
-    public function updateAndCacheSlotView($data)
+    public function updateAndCacheSlotView(array $data): void
     {
         $signature = OgImage::getSignature($data['attributes']);
 
@@ -40,7 +40,7 @@ class OgImageComponent extends Component
         return OgImage::getStorageViewFileData($signature);
     }
 
-    public function getSlotHash($slot): string
+    public function getSlotHash(string $slot): string
     {
         return md5($slot);
     }
