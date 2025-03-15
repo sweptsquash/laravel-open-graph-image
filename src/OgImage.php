@@ -182,8 +182,8 @@ class OgImage
                 'ignoreCertificateErrors' => true,
                 'customFlags' => config('og-image.chrome.flags'),
             ]);
-        
-        $screenshot =$browser->createPage()
+
+        $screenshot = $browser->createPage()
             ->setHtml($html, eventName: 'og-image')
             ->evaluate($this->injectJs())
             ->setViewport(OgImage::imageWidth(), OgImage::imageHeight())
