@@ -38,7 +38,7 @@ class OgImage
         return config('og-image.storage.disk');
     }
 
-    public function storagePath($folder = null): string
+    public function storagePath(?string $folder = null): string
     {
         return rtrim(config('og-image.storage.path')).($folder ? '/'.$folder : '');
     }
@@ -102,7 +102,7 @@ class OgImage
             ->exists($this->getStorageViewFilePath($signature));
     }
 
-    public function ensureDirectoryExists(string $folder = ''): string
+    public function ensureDirectoryExists(string $folder = ''): void
     {
         if (! File::isDirectory($this->getStoragePath($folder))) {
             File::makeDirectory($this->getStoragePath($folder), 0777, true);
@@ -183,15 +183,21 @@ class OgImage
                 'customFlags' => config('og-image.chrome.flags'),
             ]);
 
-        $screenshot = $browser->createPage()
-            ->setHtml($html, eventName: 'og-image')
-            ->evaluate($this->injectJs())
-            ->setViewport(OgImage::imageWidth(), OgImage::imageHeight())
-            ->screenshot();
+        try {
+            $screenshot = $browser->createPage();
 
-        $browser->close();
+            $screenshot->setHtml($html, eventName: 'og-image');
 
-        dd($screenshot);
+            $screenshot->evaluate($this->injectJs());
+
+            $screenshot->setViewport(OgImage::imageWidth(), OgImage::imageHeight());
+
+            $screenshot = $screenshot->screenshot();
+        } finally {
+            $browser->close();
+        }
+
+        return $screenshot->getBase64();
     }
 
     private function injectJs(): string
@@ -211,7 +217,7 @@ class OgImage
                         if (img.complete) {
                             // Image loaded and has presence
                             if (img.naturalHeight !== 0) return;
-                        
+
                             // Image failed, so it has no height
                             throw new Error("Image failed to load");
                         }
@@ -231,11 +237,11 @@ class OgImage
         $this->generateImage($request);
 
         return response(OgImage::getStorageImageFileData($request->signature), 200, [
-            'Content-Type' => 'image/'.OgImage::getImageMimeType(),
+            'Content-Type' => 'image/'.OgImage::imageExtension(),
         ]);
     }
 
-    public function generateImage($request)
+    public function generateImage(Request $request)
     {
         if ($request->view && view()->exists($request->view)) {
             $html = View::make($request->view, $request->all())
