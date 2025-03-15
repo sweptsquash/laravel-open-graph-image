@@ -3,6 +3,7 @@
 namespace Backstage\OgImage\Laravel\Commands;
 
 use Illuminate\Console\Command;
+use Illuminate\Contracts\Filesystem\Filesystem;
 use Illuminate\Support\Facades\Storage;
 
 class ClearCache extends Command
@@ -11,9 +12,9 @@ class ClearCache extends Command
 
     public $description = 'Clear cached open graph images';
 
-    protected $storageDisk;
+    protected ?string $storageDisk;
 
-    protected $storagePath;
+    protected ?string $storagePath;
 
     public function __construct()
     {
@@ -34,7 +35,7 @@ class ClearCache extends Command
         return self::SUCCESS;
     }
 
-    public function getStorageDisk()
+    public function getStorageDisk(): Filesystem
     {
         return Storage::disk($this->storageDisk);
     }
