@@ -2,6 +2,7 @@
 
 namespace Backstage\OgImage\Laravel;
 
+use Backstage\OgImage\Laravel\Http\Controllers\OgImageController;
 use HeadlessChromium\BrowserFactory;
 use Illuminate\Filesystem\FilesystemAdapter;
 use Illuminate\Http\Request;
