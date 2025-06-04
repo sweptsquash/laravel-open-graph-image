@@ -123,7 +123,7 @@ return [
 
 ## Usage
 
-Add the blade component into the head of your page. Providing the attributes you need in your view file:
+Add the Blade component into the head of your page. Providing the attributes you need in your view file:
 
 ```html
 <x-og-image-tags title="Backstage" subtitle="" />
