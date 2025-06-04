@@ -7,7 +7,7 @@ return [
     'height' => 630,
 
     'chrome' => [
-        'binary' => 'google-chrome',
+        'binary' => 'chrome',
         'flags' => [],
     ],
 
