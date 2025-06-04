@@ -29,7 +29,7 @@ Just add the meta tag with our url to the head of your page. The package will th
 
 ## Installation
 
-First install Google Chrome or Chromium, as you need the binary to use Chrome as a headless browser.
+First install Google Chrome or Chromium, as you need the binary to use it as a headless browser.
 
 ### On macOS
 
