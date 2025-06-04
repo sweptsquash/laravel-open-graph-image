@@ -28,6 +28,6 @@ class OgImageServiceProvider extends PackageServiceProvider
 
     public function packageRegistered()
     {
-        Blade::component('og-image', OgImageComponent::class);
+        Blade::component('og-image-tags', OgImageComponent::class);
     }
 }
