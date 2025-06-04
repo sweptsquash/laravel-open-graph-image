@@ -30,11 +30,6 @@ class OgImage
         return config('og-image.extension');
     }
 
-    public function imageQuality(): int
-    {
-        return config('og-image.quality');
-    }
-
     public function imageWidth(): int
     {
         return config('og-image.width');
