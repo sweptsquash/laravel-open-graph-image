@@ -1,4 +1,4 @@
-# Generate Dynamic Open Graph Images in Laravel
+# Generate Dynamic Open Graph Images in Laravel using Blade Views
 
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/backstagephp/laravel-og-image)
 [![Tests](https://github.com/backstagephp/laravel-og-image/actions/workflows/run-tests.yml/badge.svg?branch=main)](https://github.com/vormkracht10/laravel-og-image/actions/workflows/run-tests.yml)
