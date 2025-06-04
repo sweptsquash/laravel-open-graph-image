@@ -55,11 +55,6 @@ class OgImage
         return rtrim(config('og-image.storage.path')).($folder ? '/'.$folder : '');
     }
 
-    public function method(): string
-    {
-        return config('og-image.method');
-    }
-
     public function getStorageDisk(): FilesystemAdapter
     {
         return Storage::disk($this->storageDisk());
