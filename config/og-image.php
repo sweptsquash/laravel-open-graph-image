@@ -7,7 +7,7 @@ return [
     'height' => 630,
 
     'chrome' => [
-        'binary' => '/usr/bin/google-chrome-stable',
+        'binary' => 'chrome',
         'flags' => [],
     ],
 
