@@ -188,7 +188,7 @@ class OgImage
 
         $page = $browser->createPage();
 
-        $page->setHtml(html: $html, timeout: 5000, eventName: Page::NETWORK_IDLE);
+        $page->setHtml(html: $html, timeout: 10000, eventName: Page::LOAD);
         $page->setViewport(config('og-image.width'), config('og-image.height'));
         $page->evaluate($this->injectJs());
 
@@ -223,24 +223,25 @@ class OgImage
 
             await Promise.all([
                 document.fonts.ready,
-                    ...selectors.map((img) => {
+                document.querySelector('body') && document.body.innerText.trim().length > 0,
+                ...selectors.map((img) => {
 
-                        // Image has already finished loading, let’s see if it worked
-                        if (img.complete) {
-                            // Image loaded and has presence
-                            if (img.naturalHeight !== 0) return;
+                    // Image has already finished loading, let’s see if it worked
+                    if (img.complete) {
+                        // Image loaded and has presence
+                        if (img.naturalHeight !== 0) return;
 
-                            // Image failed, so it has no height
-                            throw new Error('Image failed to load');
-                        }
+                        // Image failed, so it has no height
+                        throw new Error('Image failed to load');
+                    }
 
-                        // Image hasn’t loaded yet, added an event listener to know when it does
-                        return new Promise((resolve, reject) => {
-                            img.addEventListener('load', resolve);
-                            img.addEventListener('error', reject);
-                        });
-                    })
-                ]);
+                    // Image hasn’t loaded yet, added an event listener to know when it does
+                    return new Promise((resolve, reject) => {
+                        img.addEventListener('load', resolve);
+                        img.addEventListener('error', reject);
+                    });
+                })
+            ]);
         JS;
     }
 
