@@ -95,6 +95,8 @@ This is the content of the published config file (published at `config/og-image.
 <?php
 
 return [
+    'debug' => env('OG_IMAGE_DEBUG', false), // disable caching og images for development
+
     'extension' => 'jpg', // jpg, png, webp
 
     'width' => 1200,
@@ -107,11 +109,13 @@ return [
             // '--disable-gpu',
             // '--disable-setuid-sandbox',
             // '--disable-software-rasterizer',
+            // '--hide-scrollbars',
+            // '--mute-audio',
             // '--no-sandbox',
         ],
     ],
 
-    // The cache location to use
+    // The cache location to use.
     'storage' => [
         'disk' => 'public',
         'path' => 'og-images',
