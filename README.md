@@ -143,7 +143,7 @@ If you do not want to use a view but HTML directly in your view file, than you c
 ```html
 <x-og-image-tags title="Backstage" subtitle="" view="path.to.view.file">
     <h1>Use this HTML and inline CSS to style the open graph image...</h1>
-</x-og-image>
+</x-og-image-tags>
 ```
 
 If you don't want to use the blade component you can also use the facade or helper method to generate the url to the image.
