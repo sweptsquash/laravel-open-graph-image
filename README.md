@@ -126,13 +126,13 @@ return [
 Add the blade component into the head of your page. Providing the attributes you need in your view file:
 
 ```html
-<x-og-image title="Backstage" subtitle="" />
+<x-og-image-tags title="Backstage" subtitle="" />
 ```
 
 If you want to use a different view than the default, add a `view` attribute with the path using dot or slash notation:
 
 ```html
-<x-og-image title="Backstage" subtitle="" view="path.to.view.file" />
+<x-og-image-tags title="Backstage" subtitle="" view="path.to.view.file" />
 ```
 
 If you do not want to use a view but HTML directly in your view file, than you can use the slot to add the HTML to:
@@ -141,7 +141,7 @@ If you do not want to use a view but HTML directly in your view file, than you c
 > If you're using this option, make sure to clear caches before adding or changing the HTML using `php artisan og-image:clear` to see the result in your browser.
 
 ```html
-<x-og-image title="Backstage" subtitle="" view="path.to.view.file">
+<x-og-image-tags title="Backstage" subtitle="" view="path.to.view.file">
     <h1>Use this HTML and inline CSS to style the open graph image...</h1>
 </x-og-image>
 ```
@@ -178,7 +178,7 @@ This component uses the 'template' blade view by default. You can change this te
 Want to add more custom attributes to modify the button text for example? Simply pass them down to the blade component, facade or helper method:
 
 ```html
-<x-og-image
+<x-og-image-tags
     title="Backstage"
     subtitle=""
     button="Read more"
