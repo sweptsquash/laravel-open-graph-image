@@ -27,7 +27,7 @@ class OgImageComponent extends Component
         OgImage::ensureDirectoryExists('views');
 
         if (
-            trim((string) $data['slot']) === '' ||
+            trim((string) $data['slot']) !== '' &&
             $this->getSlotHash($data['slot']) !== $this->getCachedSlotHash($signature)
         ) {
             OgImage::getStorageDisk()->put(

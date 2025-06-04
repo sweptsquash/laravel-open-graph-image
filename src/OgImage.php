@@ -69,6 +69,26 @@ class OgImage
     {
         return $this->getStorageDisk()
             ->get($this->getStorageImageFilePath($signature));
+    }    public function getStorageViewFileName(string $signature): string
+    {
+        return $signature.'.blade.php';
+    }
+
+    public function getStorageViewFilePath(string $signature, ?string $folder = null): string
+    {
+        return $this->getStoragePath('views').'/'.$this->getStorageViewFileName($signature);
+    }
+
+    public function getStorageViewFileData(string $signature): string
+    {
+        return $this->getStorageDisk()
+            ->get($this->getStorageViewFilePath($signature));
+    }
+
+    public function getStorageViewFileExists(string $signature): bool
+    {
+        return $this->getStorageDisk()
+            ->exists($this->getStorageViewFilePath($signature));
     }
 
     public function ensureDirectoryExists(string $folder = ''): void
