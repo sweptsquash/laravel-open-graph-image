@@ -1,16 +1,27 @@
 <?php
 
 return [
+    'debug' => env('OG_IMAGE_DEBUG', false), // disable caching og images for development
+
     'extension' => 'jpg', // jpg, png, webp
+
     'width' => 1200,
     'height' => 630,
 
     'chrome' => [
         'path' => env('CHROME_PATH', 'chromium'),
-        'flags' => [],
+        'flags' => [
+            // '--disable-dev-shm-usage',
+            // '--disable-gpu',
+            // '--disable-setuid-sandbox',
+            // '--disable-software-rasterizer',
+            // '--hide-scrollbars',
+            // '--mute-audio',
+            // '--no-sandbox',
+        ],
     ],
 
-    // The location to save cached versions of OG images
+    // The cache location to use.
     'storage' => [
         'disk' => 'public',
         'path' => 'og-images',

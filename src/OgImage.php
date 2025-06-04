@@ -25,49 +25,29 @@ class OgImage
         Route::get('og-image', [OgImageController::class, '__invoke'])->name('og-image.file');
     }
 
-    public function imageExtension(): string
+    public function getImageExtension(): string
     {
         return config('og-image.extension');
     }
 
-    public function imageWidth(): int
-    {
-        return config('og-image.width');
-    }
-
-    public function imageHeight(): int
-    {
-        return config('og-image.height');
-    }
-
-    public function storageDisk(): string
-    {
-        return config('og-image.storage.disk');
-    }
-
-    public function storagePath($folder = null): string
-    {
-        return rtrim(config('og-image.storage.path')).($folder ? '/'.$folder : '');
-    }
-
     public function getImageMimeType(): string
     {
-        return 'image/'.config('og-image.extension');
+        return 'image/'.$this->getImageExtension();
     }
 
     public function getStorageDisk(): FilesystemAdapter
     {
-        return Storage::disk($this->storageDisk());
+        return Storage::disk(config('og-image.storage.disk'));
     }
 
     public function getStoragePath(?string $folder = null): string
     {
-        return rtrim($this->storagePath($folder), '/');
+        return rtrim(config('og-image.storage.path')).($folder ? '/'.$folder : '');
     }
 
     public function getStorageImageFileName(string $signature): string
     {
-        return $signature.'.'.$this->imageExtension();
+        return $signature.'.'.$this->getImageExtension();
     }
 
     public function getStorageImageFilePath(string $signature): string
@@ -77,36 +57,18 @@ class OgImage
 
     public function getStorageImageFileExists(string $signature): bool
     {
+        if(config('og-image.debug') === true) {
+            return false;
+        }
+
         return $this->getStorageDisk()
             ->exists($this->getStorageImageFilePath($signature));
     }
 
-    public function getStorageImageFileData(string $signature): string
+    public function getStorageImageFileData(string $signature): ?string
     {
         return $this->getStorageDisk()
             ->get($this->getStorageImageFilePath($signature));
-    }
-
-    public function getStorageViewFileName(string $signature): string
-    {
-        return $signature.'.blade.php';
-    }
-
-    public function getStorageViewFilePath(string $signature, ?string $folder = null): string
-    {
-        return $this->getStoragePath('views').'/'.$this->getStorageViewFileName($signature);
-    }
-
-    public function getStorageViewFileData(string $signature): string
-    {
-        return $this->getStorageDisk()
-            ->get($this->getStorageViewFilePath($signature));
-    }
-
-    public function getStorageViewFileExists(string $signature): bool
-    {
-        return $this->getStorageDisk()
-            ->exists($this->getStorageViewFilePath($signature));
     }
 
     public function ensureDirectoryExists(string $folder = ''): void
@@ -165,18 +127,18 @@ class OgImage
             ->url(OgImage::getStorageImageFilePath($signature));
     }
 
-    public function saveImage(string $html, string $filename): ?string
+    public function saveImage(string $html, string $filename): void
     {
         if (OgImage::getStorageImageFileExists($filename)) {
-            return null;
+            return;
         }
 
         OgImage::ensureDirectoryExists('images');
 
-        return $this->takeScreenshot($html, $filename);
+        $this->takeScreenshot($html, $filename);
     }
 
-    public function takeScreenshot(string $html, string $filename): string
+    public function takeScreenshot(string $html, string $filename): void
     {
         $binary = (string) config('og-image.chrome.path');
 
@@ -199,13 +161,28 @@ class OgImage
         );
 
         $browser->close();
-
-        return $path;
     }
 
     public function getResponse(Request $request): Response
     {
-        $this->generateImage($request);
+        if (
+            $request->view &&
+            view()->exists($request->view)
+        ) {
+            $html = View::make($request->view, $request->all())
+                ->render();
+        } else {
+            $html = View::make('og-image::template', $request->all())
+                ->render();
+        }
+
+        if($request->route()->getName() == 'og-image.html') {
+            return response($html, 200, [
+                'Content-Type' => 'text/html',
+            ]);
+        }
+
+        OgImage::saveImage($html, $request->signature);
 
         return response(OgImage::getStorageImageFileData($request->signature), 200, [
             'Content-Type' => OgImage::getImageMimeType(),
@@ -243,24 +220,5 @@ class OgImage
                 })
             ]);
         JS;
-    }
-
-    public function generateImage($request)
-    {
-        if ($request->view && view()->exists($request->view)) {
-            $html = View::make($request->view, $request->all())
-                ->render();
-        } elseif (OgImage::getStorageViewFileExists($request->signature)) {
-            $html = OgImage::getStorageViewFileData($request->signature);
-        } else {
-            $html = View::make('og-image::template', $request->all())
-                ->render();
-        }
-
-        if ($request->route()->getName() == 'og-image') {
-            return $html;
-        }
-
-        OgImage::saveImage($html, $request->signature);
     }
 }
