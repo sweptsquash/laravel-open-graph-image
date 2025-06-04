@@ -99,7 +99,7 @@ return [
     'height' => 630,
 
     'chrome' => [
-        'binary' => '/opt/homebrew/bin/chromium',
+        'binary' => 'chromium',
         'flags' => [],
     ],
 
