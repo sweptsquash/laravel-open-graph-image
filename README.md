@@ -54,7 +54,7 @@ sudo apt install -y chromium-browser
 
 Download and install [Google Chrome](https://google.com/chrome) or [Chromium](https://chromium.woolyss.com/download/) using on of these links.
 
-### Note: configure Binary path
+### Note: configure path to binary
 
 Sometimes it's necessary to point the package to the right path where the binary is, this can be set in the config `og-image.chrome.binary`. The path can be retrieved using:
 
