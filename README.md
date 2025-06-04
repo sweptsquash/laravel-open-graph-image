@@ -29,6 +29,46 @@ Just add the meta tag with our url to the head of your page. The package will th
 
 ## Installation
 
+First install Google Chrome or Chromium, as you need the binary to use Chrome as a headless browser.
+
+### On macOS
+
+```bash
+# Google Chrome
+brew install --cask google-chrome 
+sudo xattr -rd com.apple.quarantine /Applications/Chrome.app # Remove quarantine macOS protection mechanism
+
+# Chromium
+brew install chromium
+sudo xattr -rd com.apple.quarantine /Applications/Chromium.app # Remove quarantine macOS protection mechanism
+```
+
+### On Debian/Ubuntu
+
+```bash
+sudo apt update
+sudo apt install -y chromium-browser
+```
+
+### On Windows
+
+Download and install [Google Chrome](https://google.com/chrome) or [Chromium](https://chromium.woolyss.com/download/) using on of these links.
+
+### Note: configure Binary path
+
+Sometimes it's necessary to point the package to the right path where the binary is, this can be set in the config `og-image.chrome.binary`. The path can be retrieved using:
+
+```bash
+# macOS or Debian/Ubuntu
+which chrome # probably /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome
+which chromium # probably /opt/homebrew/bin/chromium
+
+# Windows
+where chrome # probably C:\Program Files\Google\Chrome\Application\chrome.exe
+```
+
+## Install and configure package
+
 You can install the package via composer:
 
 ```bash
@@ -51,15 +91,20 @@ This is the content of the published config file (published at `config/og-image.
 
 ```php
 return [
-    'extension' => 'jpg',
+    'extension' => 'jpg', // jpg, png, webp
     'quality' => 100,
     'width' => 1200,
     'height' => 630,
 
+    'chrome' => [
+        'binary' => 'chrome',
+        'flags' => [],
+    ],
+
     // The cache location to use.
     'storage' => [
         'disk' => 'public',
-        'path' => 'open-graph',
+        'path' => 'og-images',
     ],
 
     // Whether to use the browse URL instead of the HTML input.
