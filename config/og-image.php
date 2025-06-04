@@ -11,16 +11,11 @@ return [
         'flags' => [],
     ],
 
-    // The cache location to use.
+    // The location to save cached versions of OG images
     'storage' => [
         'disk' => 'public',
         'path' => 'og-images',
     ],
-
-    // Whether to use the browse URL instead of the HTML input.
-    // This is slower, but makes fonts available.
-    // Alternative: http
-    'method' => 'html',
 
     'metatags' => [
         'og:title' => 'title',
