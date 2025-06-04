@@ -2,7 +2,6 @@
 
 return [
     'extension' => 'jpg', // jpg, png, webp
-    'quality' => 100,
     'width' => 1200,
     'height' => 630,
 
