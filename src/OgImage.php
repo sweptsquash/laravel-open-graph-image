@@ -113,7 +113,7 @@ class OgImage
             ->exists($this->getStorageViewFilePath($signature));
     }
 
-    public function ensureDirectoryExists(string $folder = ''): string
+    public function ensureDirectoryExists(string $folder = ''): void
     {
         if (! File::isDirectory($this->getStoragePath($folder))) {
             File::makeDirectory($this->getStoragePath($folder), 0777, true);
