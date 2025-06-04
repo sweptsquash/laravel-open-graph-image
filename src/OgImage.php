@@ -188,7 +188,7 @@ class OgImage
 
         $page = $browser->createPage();
 
-        $page->setHtml(html: $html, timeout: 3000, eventName: Page::LOAD);
+        $page->setHtml(html: $html, timeout: 5000, eventName: Page::NETWORK_IDLE);
         $page->setViewport(config('og-image.width'), config('og-image.height'));
 
         $screenshot = $page->screenshot();
