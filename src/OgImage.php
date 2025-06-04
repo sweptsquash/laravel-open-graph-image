@@ -207,7 +207,7 @@ class OgImage
         $this->generateImage($request);
 
         return response(OgImage::getStorageImageFileData($request->signature), 200, [
-            'Content-Type' => 'image/'.OgImage::getImageMimeType(),
+            'Content-Type' => OgImage::getImageMimeType(),
         ]);
     }
 
