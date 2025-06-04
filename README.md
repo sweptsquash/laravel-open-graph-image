@@ -46,8 +46,10 @@ sudo xattr -rd com.apple.quarantine /Applications/Chromium.app # Remove quaranti
 ### On Debian/Ubuntu
 
 ```bash
+# Install chromium from PPA instead of snap, because of permission issues with snapd version
+sudo add-apt-repository ppa:saiarcot895/chromium-dev -y
 sudo apt update
-sudo apt install -y chromium-browser
+sudo apt install chromium-browser -y
 ```
 
 ### On Windows
@@ -94,25 +96,26 @@ This is the content of the published config file (published at `config/og-image.
 
 return [
     'extension' => 'jpg', // jpg, png, webp
-    'quality' => 100,
+
     'width' => 1200,
     'height' => 630,
 
     'chrome' => [
-        'binary' => 'chromium',
-        'flags' => [],
+        'binary' => 'chromium-browser',
+        'flags' => [
+            // '--disable-dev-shm-usage',
+            // '--disable-gpu',
+            // '--disable-setuid-sandbox',
+            // '--disable-software-rasterizer',
+            // '--no-sandbox',
+        ],
     ],
 
-    // The cache location to use.
+    // The cache location to use
     'storage' => [
         'disk' => 'public',
         'path' => 'og-images',
     ],
-
-    // Whether to use the browse URL instead of the HTML input.
-    // This is slower, but makes fonts available.
-    // Alternative: http
-    'method' => 'html',
 
     'metatags' => [
         'og:title' => 'title',
