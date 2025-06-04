@@ -1,0 +1,23 @@
+<?php
+
+namespace Backstage\OgImage\Laravel\Tests;
+
+use Backstage\OgImage\Laravel\OgImageServiceProvider;
+use Orchestra\Testbench\TestCase as BaseTestCase;
+
+abstract class TestCase extends BaseTestCase
+{
+    protected function getPackageProviders($app)
+    {
+        return [
+            OgImageServiceProvider::class,
+        ];
+    }
+
+    protected function getPackageAliases($app)
+    {
+        return [
+            'OgImage' => \Backstage\OgImage\Laravel\Facades\OgImage::class,
+        ];
+    }
+}
