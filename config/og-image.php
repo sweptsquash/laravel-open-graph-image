@@ -6,7 +6,7 @@ return [
     'height' => 630,
 
     'chrome' => [
-        'binary' => 'chromium',
+        'path' => env('CHROME_PATH', 'chromium'),
         'flags' => [],
     ],
 

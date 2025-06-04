@@ -56,9 +56,9 @@ sudo apt install chromium-browser -y
 
 Download and install [Google Chrome](https://google.com/chrome) or [Chromium](https://chromium.woolyss.com/download/) using on of these links.
 
-### Note: configure path to binary
+### Note: configure path to Chrome/Chromium
 
-Sometimes it's necessary to point the package to the right path where the binary is, this can be set in the config `og-image.chrome.binary`. The path can be retrieved using:
+Sometimes it's necessary to point the package to a custom path where the binary is located, this can be set in the config `og-image.chrome.path`. The path can be retrieved using:
 
 ```bash
 # macOS or Debian/Ubuntu
@@ -101,7 +101,7 @@ return [
     'height' => 630,
 
     'chrome' => [
-        'binary' => 'chromium-browser',
+        'path' => env('CHROME_PATH', 'chromium'),
         'flags' => [
             // '--disable-dev-shm-usage',
             // '--disable-gpu',
