@@ -21,10 +21,10 @@ class OgImage
         if (app()->environment('local')) {
             Route::get('og-image/preview', [OgImageController::class, '__invoke'])->name('og-image.html');
         }
-        
+
         Route::get('og-image', [OgImageController::class, '__invoke'])->name('og-image.file');
     }
-    
+
     public function imageExtension(): string
     {
         return config('og-image.extension');
@@ -50,6 +50,11 @@ class OgImage
         return rtrim(config('og-image.storage.path')).($folder ? '/'.$folder : '');
     }
 
+    public function getImageMimeType(): string
+    {
+        return 'image/'.config('og-image.extension');
+    }
+
     public function getStorageDisk(): FilesystemAdapter
     {
         return Storage::disk($this->storageDisk());
@@ -70,7 +75,7 @@ class OgImage
         return $this->getStoragePath('images').'/'.$this->getStorageImageFileName($signature);
     }
 
-    public function getStorageImageFileExists(string $signature): string
+    public function getStorageImageFileExists(string $signature): bool
     {
         return $this->getStorageDisk()
             ->exists($this->getStorageImageFilePath($signature));
@@ -180,7 +185,7 @@ class OgImage
         $browser = $browserFactory->createBrowser([
             'customFlags' => config('og-image.chrome.flags'),
         ]);
-        
+
         $page = $browser->createPage();
 
         $page->setHtml(html: $html, timeout: 3000, eventName: Page::LOAD);
