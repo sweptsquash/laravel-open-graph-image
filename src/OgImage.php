@@ -190,6 +190,7 @@ class OgImage
 
         $page->setHtml(html: $html, timeout: 5000, eventName: Page::NETWORK_IDLE);
         $page->setViewport(config('og-image.width'), config('og-image.height'));
+        $page->evaluate($this->injectJs());
 
         $screenshot = $page->screenshot();
 
@@ -209,6 +210,38 @@ class OgImage
         return response(OgImage::getStorageImageFileData($request->signature), 200, [
             'Content-Type' => OgImage::getImageMimeType(),
         ]);
+    }
+
+    private function injectJs(): string
+    {
+        // Wait until all images and fonts have loaded
+        // Taken from: https://github.com/svycal/og-image/blob/main/priv/js/take-screenshot.js#L42C5-L63
+        // See: https://github.blog/2021-06-22-framework-building-open-graph-images/#some-performance-gotchas
+
+        return <<<'JS'
+            const selectors = Array.from(document.querySelectorAll('img'));
+
+            await Promise.all([
+                document.fonts.ready,
+                    ...selectors.map((img) => {
+
+                        // Image has already finished loading, let’s see if it worked
+                        if (img.complete) {
+                            // Image loaded and has presence
+                            if (img.naturalHeight !== 0) return;
+
+                            // Image failed, so it has no height
+                            throw new Error('Image failed to load');
+                        }
+
+                        // Image hasn’t loaded yet, added an event listener to know when it does
+                        return new Promise((resolve, reject) => {
+                            img.addEventListener('load', resolve);
+                            img.addEventListener('error', reject);
+                        });
+                    })
+                ]);
+        JS;
     }
 
     public function generateImage($request)
