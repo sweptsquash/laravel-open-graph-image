@@ -178,7 +178,7 @@ class OgImage
 
     public function takeScreenshot(string $html, string $filename): string
     {
-        $binary = (string) config('og-image.chrome.binary');
+        $binary = (string) config('og-image.chrome.path');
 
         $browserFactory = new BrowserFactory($binary);
 
