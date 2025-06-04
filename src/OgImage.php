@@ -7,12 +7,22 @@ use Illuminate\Filesystem\FilesystemAdapter;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\View;
 use Illuminate\View\ComponentAttributeBag;
 
 class OgImage
 {
+    public function routes(): void
+    {
+        if (app()->environment('local')) {
+            Route::get('og-image/preview', [OgImageController::class, '__invoke'])->name('og-image.html');
+        }
+        
+        Route::get('og-image', [OgImageController::class, '__invoke'])->name('og-image.file');
+    }
+    
     public function imageExtension(): string
     {
         return config('og-image.extension');
