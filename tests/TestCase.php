@@ -7,6 +7,8 @@ use Orchestra\Testbench\TestCase as BaseTestCase;
 
 abstract class TestCase extends BaseTestCase
 {
+    protected static $latestResponse;
+
     protected function getPackageProviders($app)
     {
         return [
