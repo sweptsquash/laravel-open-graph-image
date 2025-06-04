@@ -4,6 +4,7 @@ namespace Backstage\OgImage\Laravel;
 
 use Backstage\OgImage\Laravel\Http\Controllers\OgImageController;
 use HeadlessChromium\BrowserFactory;
+use HeadlessChromium\Page;
 use Illuminate\Filesystem\FilesystemAdapter;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -166,75 +167,44 @@ class OgImage
         }
 
         return Storage::disk(config('og-image.storage.disk'))
-            ->get(OgImage::getStorageImageFilePath($signature));
+            ->url(OgImage::getStorageImageFilePath($signature));
     }
 
-    public function saveImage(string $html, string $filename): void
+    public function saveImage(string $html, string $filename): ?string
     {
         if (OgImage::getStorageImageFileExists($filename)) {
-            return;
+            return null;
         }
 
         OgImage::ensureDirectoryExists('images');
 
-        $screenshot = $this->getScreenshot($html, $filename);
-
-        OgImage::getStorageDisk()
-            ->put(OgImage::getStorageImageFilePath($filename), $screenshot);
+        return $this->takeScreenshot($html, $filename);
     }
 
-    public function getScreenshot(string $html, string $filename): string
+    public function takeScreenshot(string $html, string $filename): string
     {
         $binary = (string) config('og-image.chrome.binary');
 
-        $browser = (new BrowserFactory($binary))
-            ->createBrowser([
-                'noSandbox' => true,
-                'ignoreCertificateErrors' => true,
-                'customFlags' => config('og-image.chrome.flags'),
-            ]);
+        $browserFactory = new BrowserFactory($binary);
+
+        $browser = $browserFactory->createBrowser([
+            'customFlags' => config('og-image.chrome.flags'),
+        ]);
         
-        $screenshot =$browser->createPage()
-            ->setHtml($html, eventName: 'og-image')
-            ->evaluate($this->injectJs())
-            ->setViewport(OgImage::imageWidth(), OgImage::imageHeight())
-            ->screenshot();
+        $page = $browser->createPage();
+
+        $page->setHtml(html: $html, timeout: 3000, eventName: Page::LOAD);
+        $page->setViewport(config('og-image.width'), config('og-image.height'));
+
+        $screenshot = $page->screenshot();
+
+        $screenshot->saveToFile(
+            path: $path = storage_path('app/public/'.OgImage::getStorageImageFilePath($filename)),
+        );
 
         $browser->close();
 
-        dd($screenshot);
-    }
-
-    private function injectJs(): string
-    {
-        // Wait until all images and fonts have loaded
-        // Taken from: https://github.com/svycal/og-image/blob/main/priv/js/take-screenshot.js#L42C5-L63
-        // See: https://github.blog/2021-06-22-framework-building-open-graph-images/#some-performance-gotchas
-
-        return <<<'JS'
-            const selectors = Array.from(document.querySelectorAll('img'));
-
-            await Promise.all([
-                document.fonts.ready,
-                    ...selectors.map((img) => {
-                        // Image has already finished loading, let’s see if it worked
-
-                        if (img.complete) {
-                            // Image loaded and has presence
-                            if (img.naturalHeight !== 0) return;
-                        
-                            // Image failed, so it has no height
-                            throw new Error("Image failed to load");
-                        }
-
-                        // Image hasn’t loaded yet, added an event listener to know when it does
-                        return new Promise((resolve, reject) => {
-                            img.addEventListener("load", resolve);
-                            img.addEventListener("error", reject);
-                        });
-                    })
-                ]);
-        JS;
+        return $path;
     }
 
     public function getResponse(Request $request): Response
