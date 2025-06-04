@@ -90,6 +90,8 @@ php artisan vendor:publish --tag="og-image-views"
 This is the content of the published config file (published at `config/og-image.php`):
 
 ```php
+<?php
+
 return [
     'extension' => 'jpg', // jpg, png, webp
     'quality' => 100,
