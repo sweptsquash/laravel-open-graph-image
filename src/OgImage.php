@@ -57,7 +57,7 @@ class OgImage
 
     public function getStorageImageFileExists(string $signature): bool
     {
-        if(config('og-image.debug') === true) {
+        if (config('og-image.debug') === true) {
             return false;
         }
 
@@ -69,7 +69,9 @@ class OgImage
     {
         return $this->getStorageDisk()
             ->get($this->getStorageImageFilePath($signature));
-    }    public function getStorageViewFileName(string $signature): string
+    }
+
+    public function getStorageViewFileName(string $signature): string
     {
         return $signature.'.blade.php';
     }
@@ -196,7 +198,7 @@ class OgImage
                 ->render();
         }
 
-        if($request->route()->getName() == 'og-image.html') {
+        if ($request->route()->getName() == 'og-image.html') {
             return response($html, 200, [
                 'Content-Type' => 'text/html',
             ]);
